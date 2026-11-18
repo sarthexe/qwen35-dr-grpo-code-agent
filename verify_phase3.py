@@ -153,6 +153,11 @@ def verify_local() -> None:
         assert base_report["metrics"]["turn1_pass_at_1"] == 0.0
         assert base_report["metrics"]["turn2_pass_at_1"] == 25.0
         assert base_report["metrics"]["self_healing_gain"] == 25.0
+        for rec in base_report["per_problem"]:
+            assert isinstance(rec["turn1_completion"], str)
+            assert len(rec["turn1_completion"]) <= 500
+            assert rec["turn2_completion"] is not None
+            assert len(rec["turn2_completion"]) <= 500
 
         # 2. Run 3-step Dr. GRPO training loop (eval_every=2, save_every=2)
         train_args = SimpleNamespace(
@@ -234,6 +239,8 @@ def verify_local() -> None:
         assert trained_report["metrics"]["turn1_pass_at_1"] == 50.0
         assert trained_report["metrics"]["turn2_pass_at_1"] == 100.0
         assert trained_report["metrics"]["self_healing_gain"] == 50.0
+        assert trained_report["per_problem"][0]["turn2_completion"] is None
+        assert trained_report["per_problem"][2]["turn2_completion"] is not None
 
         print("\n=== Comparison Table Verification ===")
         table = print_comparison_table(base_json, trained_json)
@@ -261,8 +268,8 @@ def verify_qwen35() -> None:
             max_steps=2,
             group_size=4,
             max_turns=2,
-            max_new_tokens=512,
-            micro_batch_size=2,
+            max_new_tokens=768,
+            micro_batch_size=1,
             lr=5e-6,
             warmup_ratio=0.05,
             max_grad_norm=1.0,

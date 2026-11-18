@@ -443,7 +443,7 @@ def verify_qwen35() -> None:
         model=model,
         optimizer=optimizer,
         rollout_batch=batch,
-        micro_batch_size=2,
+        micro_batch_size=1,
         max_gen_tokens=768,
     )
     print(f"Live Dr. GRPO step stats: {step_stats}")

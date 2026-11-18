@@ -188,6 +188,7 @@ def evaluate_split(
                 )
 
                 gen_1_ids_list: List[List[int]] = []
+                turn1_completions: List[str] = []
                 turn1_results: List[SandboxResult] = []
                 for idx in range(batch_len):
                     _, _, prob = batch_items[idx]
@@ -199,6 +200,7 @@ def evaluate_split(
                     comp_1 = _decode_for_grading(
                         tokenizer, trimmed_1, stop_ids=stop_ids, pad_id=pad_id
                     )
+                    turn1_completions.append(comp_1)
                     res_1 = grade_completion(
                         completion=comp_1,
                         assertions=prob.assertions,
@@ -207,6 +209,7 @@ def evaluate_split(
                     )
                     turn1_results.append(res_1)
 
+                turn2_completions: List[Optional[str]] = [None] * batch_len
                 final_results: List[SandboxResult] = list(turn1_results)
 
                 # --- Turn 2 batched self-healing for failing items ---
@@ -258,6 +261,7 @@ def evaluate_split(
                         comp_2 = _decode_for_grading(
                             tokenizer, trimmed_2, stop_ids=stop_ids, pad_id=pad_id
                         )
+                        turn2_completions[item_idx] = comp_2
                         res_2 = grade_completion(
                             completion=comp_2,
                             assertions=prob.assertions,
@@ -276,6 +280,7 @@ def evaluate_split(
                         if rf.think_content
                         else 0
                     )
+                    t2_raw = turn2_completions[idx]
                     sample_records.append(
                         {
                             "problem_index": prob_idx,
@@ -294,6 +299,10 @@ def evaluate_split(
                             "security_violation": rf.security_violation,
                             "timed_out": rf.timed_out,
                             "first_failure": "" if rf.all_passed else rf.first_failure_traceback,
+                            "turn1_completion": turn1_completions[idx][:500],
+                            "turn2_completion": (
+                                t2_raw[:500] if t2_raw is not None else None
+                            ),
                         }
                     )
     finally:

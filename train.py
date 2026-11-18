@@ -394,7 +394,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--group-size", type=int, default=4)
     parser.add_argument("--max-turns", type=int, default=2)
     parser.add_argument("--max-new-tokens", type=int, default=768)
-    parser.add_argument("--micro-batch-size", type=int, default=2)
+    parser.add_argument("--micro-batch-size", type=int, default=1)
     parser.add_argument("--lr", type=float, default=5e-6)
     parser.add_argument("--warmup-ratio", type=float, default=0.05)
     parser.add_argument("--max-grad-norm", type=float, default=1.0)

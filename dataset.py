@@ -162,11 +162,11 @@ def format_problem_prompt(
         f"```python\n{first_assertion.strip()}\n```\n"
         f"{imports_block}\n"
         "Instructions:\n"
-        "1. Reason step-by-step about the algorithm and edge cases inside <think>...</think>.\n"
-        "2. Provide your complete, self-contained Python solution inside <patch>...</patch> "
-        "(or a ```python ... ``` code block) after </think>.\n"
-        "3. Include any necessary standard library imports inside your solution, and do not "
-        "include test assertions or forbidden modules (os, sys, subprocess, etc.)."
+        "1. Keep your <think> reasoning concise and focused (under 200 words), then immediately "
+        "output the complete Python solution inside <patch>...</patch>.\n"
+        "2. Your solution inside <patch>...</patch> (or a ```python ... ``` code block after </think>) "
+        "must be complete and self-contained, including any necessary standard library imports.\n"
+        "3. Do not include test assertions or forbidden modules (os, sys, subprocess, etc.)."
     )
 
 
