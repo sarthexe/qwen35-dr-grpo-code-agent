@@ -8,7 +8,7 @@ from typing import Any, Dict, Optional, Tuple, Union
 import torch
 import torch.nn.functional as F
 
-from rollout import RolloutBatch
+from .rollout import RolloutBatch
 
 
 def _freeze_vision_modules(model: Any) -> None:

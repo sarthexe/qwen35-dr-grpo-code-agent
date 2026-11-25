@@ -11,8 +11,8 @@ from typing import Any, Dict, List, Optional
 
 import torch
 
-from dataset import MBPPPlusProblem, format_chat_messages, load_mbppplus_splits
-from rollout import (
+from .dataset import MBPPPlusProblem, format_chat_messages, load_mbppplus_splits
+from .rollout import (
     _build_turn2_suffix_ids,
     _decode_for_grading,
     _generate_batch,
@@ -21,7 +21,7 @@ from rollout import (
     _render_chat_template,
     _trim_generated_ids,
 )
-from sandbox import SandboxResult, grade_completion
+from .sandbox import SandboxResult, grade_completion
 
 
 def set_generation_mode(model: Any) -> None:
@@ -47,7 +47,7 @@ def load_model_for_eval(
     adapter_path: Optional[str] = None,
 ) -> tuple[Any, Any]:
     """Loads 4-bit Qwen3.5-4B for base (`disable_adapter`) or trained LoRA evaluation."""
-    from grpo_engine import _freeze_vision_modules, load_qwen35_4bit
+    from .grpo_engine import _freeze_vision_modules, load_qwen35_4bit
 
     if not adapter_path:
         return load_qwen35_4bit(model_name=model_id)
@@ -361,6 +361,17 @@ def evaluate_split(
 
 def print_comparison_table(base_json_path: str, trained_json_path: str) -> str:
     """Loads base and trained JSON reports and prints a Markdown comparison table."""
+    missing = [p for p in (base_json_path, trained_json_path) if not os.path.exists(p)]
+    if missing:
+        raise SystemExit(
+            "Missing benchmark report(s):\n"
+            + "\n".join(f"  - {p}" for p in missing)
+            + "\n\nGenerate them first, e.g.:\n"
+            "  python -m dr_grpo.eval_benchmark --mode base    --split test\n"
+            "  python -m dr_grpo.eval_benchmark --mode trained --split test --adapter-path checkpoints/dr_grpo_final\n"
+            "  python -m dr_grpo.eval_benchmark --mode compare"
+        )
+
     with open(base_json_path, "r", encoding="utf-8") as f:
         base_data = json.load(f)
     with open(trained_json_path, "r", encoding="utf-8") as f:

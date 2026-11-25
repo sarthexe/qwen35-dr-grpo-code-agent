@@ -13,15 +13,15 @@ from typing import Any, Deque, Dict, List, Optional
 
 import torch
 
-from dataset import MBPPPlusProblem, load_mbppplus_splits
-from eval_benchmark import (
+from .dataset import MBPPPlusProblem, load_mbppplus_splits
+from .eval_benchmark import (
     evaluate_split,
     print_comparison_table,
     set_generation_mode,
     set_training_mode,
 )
-from grpo_engine import dr_grpo_train_step, load_qwen35_4bit
-from rollout import collect_group_rollouts
+from .grpo_engine import dr_grpo_train_step, load_qwen35_4bit
+from .rollout import collect_group_rollouts
 
 
 def _build_optimizer(model: Any, lr: float) -> torch.optim.Optimizer:

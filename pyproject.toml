@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dr-grpo-code-agent"
+version = "0.1.0"
+description = "Pure-PyTorch multi-turn self-healing code reasoning agent trained with Dr. GRPO on Qwen/Qwen3.5-4B"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+keywords = ["dr-grpo", "reinforcement-learning", "code-generation", "qwen", "lora", "qlora"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+# Runtime dependencies are intentionally declared in requirements.txt:
+# they are pinned for a Colab T4 image and are heavy (torch, transformers,
+# peft, bitsandbytes, datasets). Keeping them out of the build metadata makes
+# `pip install -e .` a fast, offline-friendly operation.
+dependencies = []
+
+[project.scripts]
+dr-grpo-train = "dr_grpo.train:main"
+dr-grpo-eval = "dr_grpo.eval_benchmark:main"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]

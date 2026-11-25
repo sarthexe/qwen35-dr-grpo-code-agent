@@ -1,11 +1,35 @@
+# Python
 __pycache__/
 *.py[cod]
 *$py.class
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Virtual environments
 .venv/
 venv/
+env/
+
+# Secrets / local config
 .env
+.env.*
+*.key
+
+# Run artefacts (regenerate with `python -m dr_grpo.train`)
 checkpoints/
 logs/
 *.pt
 *.safetensors
+
+# Benchmark reports are committed on purpose (they are the headline result),
+# but keep the large Avg@4 variants out of git.
+benchmarks/*_avg4.json
+
+# OS / editor
 .DS_Store
+Thumbs.db
+.idea/
+.vscode/

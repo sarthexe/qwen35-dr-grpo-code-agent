@@ -1,12 +1,28 @@
-"""Phase 1 Verification Script for dataset.py and sandbox.py."""
+"""Phase 1 verification: dataset splits/assertion extraction and the sandbox reward.
+
+Checks:
+  1. deterministic 250 / 50 / 128 split over ``evalplus/mbppplus``
+  2. per-problem assertion extraction on real problems
+  3. shaped reward: full pass, partial credit, AST blocking, 2.0s timeout,
+     missing-``think`` rejection and the Turn-2 duplicate-code penalty
+
+Usage:
+    python scripts/verify_phase1.py
+"""
 
 from __future__ import annotations
 
 import math
+import os
+import sys
 import time
 
-from dataset import load_mbppplus_splits
-from sandbox import grade_completion
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+import _bootstrap  # noqa: F401  (puts src/ on sys.path for a fresh clone)
+
+from dr_grpo.dataset import load_mbppplus_splits
+from dr_grpo.sandbox import grade_completion
 
 
 def main() -> None:

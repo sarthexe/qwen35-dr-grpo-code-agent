@@ -7,8 +7,8 @@ from typing import Any, Dict, List, Optional, Sequence
 
 import torch
 
-from dataset import MBPPPlusProblem, format_chat_messages
-from sandbox import SandboxResult, grade_completion
+from .dataset import MBPPPlusProblem, format_chat_messages
+from .sandbox import SandboxResult, grade_completion
 
 
 @dataclass
